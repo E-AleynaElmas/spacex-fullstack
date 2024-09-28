@@ -6,7 +6,7 @@ export const DatabaseConfig: TypeOrmModuleOptions = {
   host: 'localhost',
   port: 5432,
   username: 'testuser',
-  password: 'testuser_123',
+  password: 'testuser123',
   database: 'my_database',
   entities: [User],
   //synchronize: geliştirme aşamasında true, ancak üretim ortamında false olarak ayarlanmalıdır.
