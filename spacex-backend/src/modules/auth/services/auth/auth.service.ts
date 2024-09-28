@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 import { UsersService } from 'src/modules/users/services/users/users.service';
+import { LoginDto } from '../../dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,5 +17,13 @@ export class AuthService {
     return user;
   }
 
-  //TODO: Login metodu ekle.
+  async login(loginDto: LoginDto) {
+    const user = await this.usersService.findByEmail(loginDto.email);
+    if (user && (await bcrypt.compare(loginDto.password, user.password))) {
+      // Kullanıcı doğrulandı, JWT token oluşturulabilir
+      return user;
+    } else {
+      throw new Error('Invalid credentials');
+    }
+  }
 }
