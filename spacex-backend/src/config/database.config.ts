@@ -9,5 +9,6 @@ export const DatabaseConfig: TypeOrmModuleOptions = {
   password: 'testuser_123',
   database: 'my_database',
   entities: [User],
+  //synchronize: geliştirme aşamasında true, ancak üretim ortamında false olarak ayarlanmalıdır.
   synchronize: true,
 };
