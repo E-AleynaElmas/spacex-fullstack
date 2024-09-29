@@ -8,14 +8,17 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   // Swagger yapılandırması
-  const config = new DocumentBuilder()
-    .setTitle('SpaceX API Documentation')
-    .setVersion('1.0')
-    .addBearerAuth() // JWT Authentication için
-    .build();
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('Proje API Dokümantasyonu')
+      .setDescription('Projenizin API açıklaması')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+  }
 
   await app.listen(3000);
 }
