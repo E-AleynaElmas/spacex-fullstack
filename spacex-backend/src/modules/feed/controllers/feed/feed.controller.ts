@@ -31,7 +31,19 @@ export class FeedController {
   @Post()
   @ApiOperation({ summary: 'Create a new feed.' })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('image'))
+  //Dosyaları geçici olarak sunucuda saklamak için FileInterceptor kullanılır.
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, uniqueSuffix + '-' + file.originalname);
+        },
+      }),
+    }),
+  )
   @ApiBody({
     description: 'Creating feeds',
     type: CreateFeedDto,
