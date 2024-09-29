@@ -8,6 +8,7 @@ import {
   Put,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
@@ -17,6 +18,7 @@ import { UpdateFeedDto } from '../../dto/update-feed.dto';
 import { FeedService } from '../../services/feed/feed.service';
 import { Inject } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { CreateFeedWithImageDto } from '../../dto/create-feed-with-image.dto';
 
 @ApiTags('feed')
 @Controller('feed')
@@ -29,10 +31,20 @@ export class FeedController {
   @Post()
   @ApiOperation({ summary: 'Create a new feed.' })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(
+    FileInterceptor('image', {
+      fileFilter: (req, file, cb) => {
+        if (file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
+          cb(null, true);
+        } else {
+          cb(new BadRequestException('Unsupported file type.'), false);
+        }
+      },
+    }),
+  )
   @ApiBody({
     description: 'Creating feeds',
-    type: CreateFeedDto,
+    type: CreateFeedWithImageDto,
   })
   async create(
     @Body() createFeedDto: CreateFeedDto,
@@ -49,13 +61,13 @@ export class FeedController {
         },
       });
 
-      // Dosyanın genel URL'sini alın
       const [url] = await file.getSignedUrl({
         action: 'read',
         expires: '03-09-2491',
       });
 
-      createFeedDto.imageUrl = url;
+      // createFeedDto'ya imageUrl alanını ekliyoruz
+      (createFeedDto as any).imageUrl = url;
     }
     return this.feedService.create(createFeedDto);
   }
@@ -69,7 +81,7 @@ export class FeedController {
   @Get(':id')
   @ApiOperation({ summary: 'Fetch with specific feed id.' })
   findOne(@Param('id') id: string) {
-    return this.feedService.findOne(+id);
+    return this.feedService.findOne(Number(id));
   }
 
   @Put(':id')

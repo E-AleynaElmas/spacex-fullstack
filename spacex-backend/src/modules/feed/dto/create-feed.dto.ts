@@ -1,8 +1,8 @@
 import {
   IsNotEmpty,
-  IsOptional,
   IsString,
   IsDateString,
+  IsOptional,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -22,7 +22,6 @@ export class CreateFeedDto {
   @IsDateString()
   date: string;
 
-  @ApiProperty({ description: 'Image URL', required: false })
   @IsOptional()
   @IsString()
   imageUrl?: string;
