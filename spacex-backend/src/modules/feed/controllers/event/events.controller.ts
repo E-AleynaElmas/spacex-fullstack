@@ -8,20 +8,14 @@ import {
   Put,
   UseInterceptors,
   UploadedFile,
-  UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 
 import { EventsService } from '../../services/event/event.service';
 import { CreateEventDto } from '../../dto/create-event.dto';
 import { UpdateEventDto } from '../../dto/update-event.dto';
 
-import {
-  ApiTags,
-  ApiOperation,
-  ApiConsumes,
-  ApiBody,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
@@ -29,7 +23,6 @@ import { Inject } from '@nestjs/common';
 
 import * as admin from 'firebase-admin';
 
-import { JwtAuthGuard } from '../../../../common/guards/jwt-auth.guard';
 import { CreateEventWithImageDto } from '../../dto/create-event-with-image.dto';
 
 @ApiTags('feed/events')
@@ -41,8 +34,6 @@ export class EventsController {
   ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new event.' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
@@ -76,7 +67,7 @@ export class EventsController {
     return this.eventsService.create(createEventDto);
   }
 
-  @Get()
+  @Get('')
   @ApiOperation({ summary: 'Get all events.' })
   findAll() {
     return this.eventsService.findAll();
@@ -84,26 +75,22 @@ export class EventsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Fetch with specific event id.' })
-  findOne(@Param('id') id: string) {
-    return this.eventsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.eventsService.findOne(id);
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update with specific event id.' })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateEventDto: UpdateEventDto,
   ) {
-    return this.eventsService.update(+id, updateEventDto);
+    return this.eventsService.update(id, updateEventDto);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete event.' })
-  async remove(@Param('id') id: string) {
-    return this.eventsService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return this.eventsService.remove(id);
   }
 }

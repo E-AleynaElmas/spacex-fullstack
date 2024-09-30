@@ -78,7 +78,7 @@ export class FeedController {
     return this.feedService.findAll();
   }
 
-  @Get(':id')
+  @Get(':id(\\d+)')
   @ApiOperation({ summary: 'Fetch with specific feed id.' })
   findOne(@Param('id') id: string) {
     return this.feedService.findOne(Number(id));

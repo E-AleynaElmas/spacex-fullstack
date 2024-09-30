@@ -8,6 +8,7 @@ import { FeedModule } from './modules/feed/feed.module';
 import { FirebaseModule } from './modules/firebase/firebase/firebase.module';
 import { User } from './modules/users/entities/user.entity';
 import { Feed } from './modules/feed/entities/feed.entity';
+import { Event } from './modules/feed/entities/event.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Feed } from './modules/feed/entities/feed.entity';
     }),
     TypeOrmModule.forRoot({
       ...DatabaseConfig,
-      entities: [User, Feed], // Feed entity'sini ekledik
+      entities: [User, Feed, Event],
       synchronize: true,
     }),
     UsersModule,
