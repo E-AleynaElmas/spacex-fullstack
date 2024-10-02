@@ -2,29 +2,42 @@ version: '3.8'
 
 services:
   app:
-    build: .
-    ports:
-      - '3000:3000'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs_app
+    restart: unless-stopped
     env_file:
-      - .env
+      - .env.production
+    ports:
+      - "3000:3000"
     depends_on:
       - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./firebase-service-account.json:/app/firebase-service-account.json 
     networks:
       - app-network
 
   db:
-    image: postgres:13-alpine
+    image: postgres:14
+    container_name: postgres_db
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: your_username
-      POSTGRES_PASSWORD: your_password
-      POSTGRES_DB: your_database
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - app-network
 
-volumes:
-  db_data:
-
 networks:
   app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

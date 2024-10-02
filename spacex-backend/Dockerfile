@@ -1,29 +1,33 @@
-# Aşama 1: Build Aşaması
-FROM node:14-alpine AS builder
-
-WORKDIR /usr/src/app
-
+# Build aşaması
+FROM node:20.9.0 AS builder
+WORKDIR /app
 COPY package*.json ./
-COPY yarn.lock ./
-
-RUN yarn install --frozen-lockfile
-
+RUN npm install
 COPY . .
+RUN npm run build
 
-RUN yarn build
+# Production phase
+FROM node:20.9.0-alpine
+WORKDIR /app
 
-# Aşama 2: Production Aşaması
-FROM node:14-alpine
-
-WORKDIR /usr/src/app
+# install netcat (nc) tool
+RUN apk add --no-cache netcat-openbsd
 
 COPY package*.json ./
-COPY yarn.lock ./
+RUN npm install --only=production
 
-RUN yarn install --production --frozen-lockfile
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/firebase-service-account.json ./firebase-service-account.json
 
-COPY --from=builder /usr/src/app/dist ./dist
+# Copy entrypoint.sh and make it executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
+ENV NODE_ENV=production
 EXPOSE 3000
 
+RUN npm install tsconfig-paths
+
+# Entrypoint and CMD definitions
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["node", "dist/main.js"]
