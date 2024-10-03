@@ -1,16 +1,15 @@
 #!/bin/sh
 
 # Wait for PostgreSQL to be ready
-echo "PostgreSQL is expected..."
+echo "Waiting for PostgreSQL to be ready..."
 
+# PostgreSQL'in hazır olup olmadığını kontrol et
 while ! nc -z db 5432; do
   sleep 0.1
 done
 
-echo "PostgreSQL started"
+echo "PostgreSQL is ready."
 
-# Run migrations
-npm run migration:run
-
-# Run main process
+# Uygulamayı başlat
+echo "Starting the application..."
 exec "$@"
