@@ -2,7 +2,7 @@
 const nextConfig = {
   basePath:'',
     images: {
-        domains: ["via.placeholder.com"],
+        domains: ["via.placeholder.com","storage.googleapis.com"],
       },
 };
 

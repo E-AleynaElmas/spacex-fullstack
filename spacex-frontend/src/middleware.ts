@@ -24,7 +24,6 @@ export const config = {
     "/settings",
     "/calendar",
     "/auth/login", 
-    "/auth/register",
     "/", 
   ],
 };

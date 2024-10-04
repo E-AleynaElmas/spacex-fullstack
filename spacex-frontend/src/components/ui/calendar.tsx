@@ -1,6 +1,6 @@
 "use client";
 import BgBase from "@/assets/images/bg-base.png";
-import { formatDateToTurkish } from "@/lib/utils";
+import { formatDateToDefault } from "@/lib/utils";
 import {
   addDays,
   addMonths,
@@ -117,7 +117,7 @@ const Calendar: React.FC<CalendarProps> = ({ events }) => {
                   className="bg-[#212F42] rounded p-1 mt-1 cursor-pointer"
                   onClick={() => setSelectedEvent(event)}
                 >
-                  {formatDateToTurkish(event.date).formattedTime}
+                  {formatDateToDefault(event.date).formattedTime}
                 </div>
               ))}
           </div>
