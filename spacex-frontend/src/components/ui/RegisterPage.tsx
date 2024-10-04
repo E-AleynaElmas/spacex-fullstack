@@ -1,5 +1,6 @@
 "use client";
 
+import useRegister from "@/api/mutations/useRegister";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,6 +12,8 @@ import { AuthLayout } from "../layouts/auth-layout";
 type Inputs = {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
   passwordAgain: string;
 };
 
@@ -23,6 +26,8 @@ const schema = yup.object().shape({
     .string()
     .min(6, "Şifre en az 6 karakter olmalıdır")
     .required("Şifre gereklidir"),
+  firstName: yup.string().required("İsim gereklidir"),
+  lastName: yup.string().required("Soyisim gereklidir"),
   passwordAgain: yup
     .string()
     .oneOf([yup.ref("password")], "Şifreler eşleşmiyor")
@@ -38,8 +43,11 @@ export default function RegisterPage() {
     resolver: yupResolver(schema),
   });
 
+  const createUser = useRegister();
+
   const onSubmit = (data: Inputs) => {
     console.log("Register attempted with:", data);
+    createUser.mutateAsync(data);
   };
 
   return (
@@ -58,6 +66,24 @@ export default function RegisterPage() {
           />
           {errors.email && (
             <span className="text-red-500">{errors.email.message}</span>
+          )}
+          <Input
+            type="firstName"
+            placeholder="First Name"
+            {...register("firstName")}
+            className="bg-[#1C1E22] border-gray-600 text-white placeholder-gray-400"
+          />
+          {errors.firstName && (
+            <span className="text-red-500">{errors.firstName.message}</span>
+          )}
+          <Input
+            type="lastName"
+            placeholder="Last Name"
+            {...register("lastName")}
+            className="bg-[#1C1E22] border-gray-600 text-white placeholder-gray-400"
+          />
+          {errors.lastName && (
+            <span className="text-red-500">{errors.lastName.message}</span>
           )}
           <Input
             type="password"
