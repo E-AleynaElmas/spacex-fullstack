@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { formatDateToTurkish } from "@/lib/utils";
+import { formatDateToDefault } from "@/lib/utils";
 
 interface UpcomingEventCardProps {
   title: string;
@@ -14,7 +14,8 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({
   imageUrl,
 }) => {
   // Tarih ve saati formatlama
-  const { formattedDate, formattedTime } = formatDateToTurkish(date);
+  const { formattedDate, formattedTime } = formatDateToDefault(date);
+  console.log(date, formattedDate, formattedTime);
 
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg min-w-[250px]">

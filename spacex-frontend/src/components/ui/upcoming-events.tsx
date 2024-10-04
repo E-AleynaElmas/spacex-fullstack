@@ -1,24 +1,42 @@
-import React from "react";
-import UpcomingEventCard from "./upcoming-event-card";
-import { upcomingEvents } from "@/lib/dummys/home-dummy-data";
+"use client";
+import useGetFeedEvents from "@/api/queries/useGetFeedEvents";
 import { PlusIcon } from "lucide-react";
+import React from "react";
+import CircleSpinner from "./circle-spinner";
+import UpcomingEventCard from "./upcoming-event-card";
+
+interface UpcomingEventsProps {
+  id: number;
+  title: string;
+  date: string;
+  imageUrl: string;
+}
 
 const UpcomingEvents: React.FC = () => {
+  const { data: feedEventsData, isLoading: feedEventsIsLoading } =
+    useGetFeedEvents();
+
   return (
     <section>
-      <div className="flex bg-red-500 justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4">
         <h2 className="text-white text-2xl font-semibold">Upcoming Events</h2>
         <PlusIcon className="h-6 w-6 text-white" />
       </div>
       <div className="flex space-x-4 overflow-x-auto">
-        {upcomingEvents.map((event) => (
-          <UpcomingEventCard
-            key={event.id}
-            title={event.title}
-            date={event.date}
-            imageUrl={event.imageUrl}
-          />
-        ))}
+        {feedEventsIsLoading ? (
+          <div className="flex justify-center w-full  items-center">
+            <CircleSpinner className="w-10 h-10" />
+          </div>
+        ) : (
+          feedEventsData.map((event: UpcomingEventsProps) => (
+            <UpcomingEventCard
+              key={event.id}
+              title={event.title}
+              date={event.date}
+              imageUrl={event.imageUrl}
+            />
+          ))
+        )}
       </div>
     </section>
   );

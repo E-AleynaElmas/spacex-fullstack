@@ -1,10 +1,14 @@
 "use client";
 import React from "react";
 
-const CircleSpinner: React.FC = () => {
+interface CircleSpinnerProps {
+  className?: string;
+}
+
+const CircleSpinner: React.FC<CircleSpinnerProps> = ({ className = "" }) => {
   return (
     <svg
-      className="animate-spin h-5 w-5 text-white"
+      className={`animate-spin text-white ${className}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

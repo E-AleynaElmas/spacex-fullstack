@@ -1,4 +1,4 @@
-import { formatDateToTurkish } from "@/lib/utils";
+import { formatDateToDefault } from "@/lib/utils";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal/Modal";
@@ -20,7 +20,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({
   open,
   onClose,
 }) => {
-  const { formattedDate, formattedTime } = formatDateToTurkish(event.date);
+  const { formattedDate, formattedTime } = formatDateToDefault(event.date);
   const [timeLeft, setTimeLeft] = useState("");
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({
 
           <div className="absolute bottom-0 left-0 w-full h-[20%] bg-black bg-opacity-50 backdrop-blur-sm rounded-md flex justify-center items-center px-4">
             {!timeLeft ? (
-              <CircleSpinner />
+              <CircleSpinner className="w-7 h-7" />
             ) : timeLeft === "Etkinlik bitti" ? (
               <span className="text-white text-center w-full">
                 Etkinlik bitti

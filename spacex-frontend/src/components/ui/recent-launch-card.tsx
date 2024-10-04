@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { formatDateToTurkish } from "@/lib/utils";
+import { formatDateToDefault } from "@/lib/utils";
 
 interface RecentLaunchCardProps {
   title: string;
@@ -15,7 +15,7 @@ const RecentLaunchCard: React.FC<RecentLaunchCardProps> = ({
   date,
   imageUrl,
 }) => {
-  const { formattedDate, formattedTime } = formatDateToTurkish(date);
+  const { formattedDate, formattedTime } = formatDateToDefault(date);
   return (
     <div className="flex flex-row space-x-4">
       <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg flex w-5/6">
