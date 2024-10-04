@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { AuthLayout } from "../layouts/auth-layout";
+import useLogin from "@/api/mutations/useLogin";
 
 type Inputs = {
   email: string;
@@ -33,8 +34,11 @@ export default function LoginPage() {
     resolver: yupResolver(schema),
   });
 
+  const loginUser = useLogin();
+
   const onSubmit = (data: Inputs) => {
     console.log("Login attempted with:", data);
+    loginUser.mutateAsync(data);
   };
 
   return (
