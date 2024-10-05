@@ -126,6 +126,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/file/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload image. */
+        post: operations["FileController_uploadImage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -146,19 +163,6 @@ export interface components {
             /** @description User Password */
             password: string;
         };
-        CreateFeedWithImageDto: {
-            /** @description Title */
-            title: string;
-            /** @description Description */
-            description: string;
-            /**
-             * @description Date
-             * @example 2024-07-05T10:00:00
-             */
-            date: string;
-            /** Format: binary */
-            image?: string;
-        };
         UpdateFeedDto: {
             /** @description Title */
             title?: string;
@@ -169,17 +173,11 @@ export interface components {
              * @example 2024-07-05T10:00:00
              */
             date?: string;
-        };
-        CreateEventWithImageDto: {
-            /** @description Title */
-            title: string;
             /**
-             * @description Date
-             * @example 2024-06-12T21:10:00
+             * @description Image URL
+             * @example https://example.com/image.jpg
              */
-            date: string;
-            /** Format: binary */
-            image?: string;
+            imageUrl?: string;
         };
         UpdateEventDto: {
             /** @description Title */
@@ -189,6 +187,11 @@ export interface components {
              * @example 2024-06-12T21:10:00
              */
             date?: string;
+            /**
+             * @description Image URL
+             * @example https://example.com/image.jpg
+             */
+            imageUrl?: string;
         };
     };
     responses: never;
@@ -309,7 +312,7 @@ export interface operations {
         /** @description Creating feeds */
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["CreateFeedWithImageDto"];
+                "multipart/form-data": string;
             };
         };
         responses: {
@@ -409,7 +412,7 @@ export interface operations {
         /** @description Creating event. */
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["CreateEventWithImageDto"];
+                "multipart/form-data": string;
             };
         };
         responses: {
@@ -475,6 +478,30 @@ export interface operations {
         requestBody?: never;
         responses: {
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    FileController_uploadImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    image?: string;
+                };
+            };
+        };
+        responses: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
