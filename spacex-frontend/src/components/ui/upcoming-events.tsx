@@ -37,6 +37,7 @@ const UpcomingEvents: React.FC = () => {
         ) : (
           feedEventsData.map((event: UpcomingEventsProps) => (
             <UpcomingEventCard
+            id={event.id}
               key={event.id}
               title={event.title}
               date={event.date}
