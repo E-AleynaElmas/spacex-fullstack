@@ -1,7 +1,8 @@
 "use client";
 import useGetFeedEvents from "@/api/queries/useGetFeedEvents";
 import { PlusIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import AddEventModal from "./add-event-modal";
 import CircleSpinner from "./circle-spinner";
 import UpcomingEventCard from "./upcoming-event-card";
 
@@ -15,12 +16,18 @@ interface UpcomingEventsProps {
 const UpcomingEvents: React.FC = () => {
   const { data: feedEventsData, isLoading: feedEventsIsLoading } =
     useGetFeedEvents();
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <section>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-white text-2xl font-semibold">Upcoming Events</h2>
-        <PlusIcon className="h-6 w-6 text-white" />
+        <PlusIcon
+          className="h-6 w-6 text-white"
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        />
       </div>
       <div className="flex space-x-4 overflow-x-auto">
         {feedEventsIsLoading ? (
@@ -38,6 +45,9 @@ const UpcomingEvents: React.FC = () => {
           ))
         )}
       </div>
+      {openModal && (
+        <AddEventModal open={openModal} onClose={() => setOpenModal(false)} />
+      )}
     </section>
   );
 };
