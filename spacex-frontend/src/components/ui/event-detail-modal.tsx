@@ -3,6 +3,8 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal/Modal";
 import CircleSpinner from "./circle-spinner";
+import { ArrowBackCircleIcon } from "@/assets/icons/arrow-back-circle-icon";
+import { TrashIcon } from "@/assets/icons/trash-icon";
 
 interface EventDetailModalProps {
   event: {
@@ -46,6 +48,14 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({
     return () => clearInterval(interval);
   }, [event.date]);
 
+  const handleBackClick = () => {
+    console.log("Back button clicked");
+  };
+
+  const handleTrashClick = () => {
+    console.log("Trash button clicked");
+  };
+
   return (
     <Modal open={open} onClose={onClose} className="w-full md:w-1/2 lg:w-1/3">
       <div className="rounded-lg overflow-hidden w-full">
@@ -80,8 +90,24 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({
           <p className="text-gray-400 mb-2">
             {formattedDate} {formattedTime}
           </p>
-          <p className="text-gray-400">{event.description}</p>
+          <p className="text-gray-400 text-center break-words">
+            {event.description}
+          </p>
         </div>
+
+        {/* Butonları burada ekliyoruz */}
+        <button
+          className="absolute right-20 top-10 z-50"
+          onClick={handleBackClick}
+        >
+          <ArrowBackCircleIcon color="#f0f0f0" />
+        </button>
+        <button
+          className="absolute right-10 top-10 z-50"
+          onClick={handleTrashClick}
+        >
+          <TrashIcon color="#f0f0f0" />
+        </button>
       </div>
     </Modal>
   );

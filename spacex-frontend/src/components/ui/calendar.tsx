@@ -27,12 +27,17 @@ interface Event {
 
 interface CalendarProps {
   events: Event[];
+  eventsLoading?: boolean;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ events }) => {
+const Calendar: React.FC<CalendarProps> = ({ events,eventsLoading }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [view, setView] = useState<"monthly" | "weekly">("monthly");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
+  if(eventsLoading){
+    return <div>Loading...</div>
+  }
 
   const renderHeader = () => {
     return (

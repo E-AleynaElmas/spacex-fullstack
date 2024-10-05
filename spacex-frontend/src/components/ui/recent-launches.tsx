@@ -20,12 +20,12 @@ const RecentLaunches: React.FC = () => {
     <section>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-white text-2xl font-semibold">Recent Launch</h2>
-        <PlusIcon className="h-6 w-6 text-white" />
+        <PlusIcon className="h-6 w-6 text-white" onClick={() => null} />
       </div>
       <div className="space-y-4">
         {feedIsLoading ? (
           <div className="flex justify-center items-center">
-            <CircleSpinner className="w-10 h-10"  />
+            <CircleSpinner className="w-10 h-10" />
           </div>
         ) : (
           feedData.map((launch: RecentLaunchesProps) => (

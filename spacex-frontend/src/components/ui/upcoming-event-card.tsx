@@ -20,7 +20,7 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg min-w-[250px]">
       <Image
-        src={imageUrl}
+        src={imageUrl || "https://via.placeholder.com/150"}
         alt={title}
         width={400}
         height={200}

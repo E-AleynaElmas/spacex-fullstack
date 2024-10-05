@@ -1,10 +1,9 @@
+import { Toaster } from "@/components/ui/sonner";
 import TanstackQueryProvider from "@/providers/TanstackQueryProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import React from "react";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
-
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

@@ -43,20 +43,6 @@ export function Modal({
           <Backdrop onClose={onClose}>
             <Content className={className} {...props}>
               {children}
-              <View.If visible={closeButton}>
-                <button
-                  className="absolute right-20 top-10 z-50"
-                  onClick={onClose}
-                >
-                  <ArrowBackCircleIcon color="#f0f0f0" />
-                </button>
-                <button>
-                  <TrashIcon
-                    className="absolute right-10 top-10 z-50"
-                    color="#f0f0f0"
-                  />
-                </button>
-              </View.If>
             </Content>
           </Backdrop>
         </FloatingOverlay>

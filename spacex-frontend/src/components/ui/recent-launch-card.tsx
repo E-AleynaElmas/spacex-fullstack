@@ -28,7 +28,7 @@ const RecentLaunchCard: React.FC<RecentLaunchCardProps> = ({
         />
         <div className="p-4 flex-1">
           <h3 className="text-white text-lg font-semibold">{title}</h3>
-          <p className="text-gray-400">{description}</p>
+          <p className="text-gray-400  break-all">{description}</p>
         </div>
       </div>
       <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg flex-col flex w-1/6 justify-center items-center">
