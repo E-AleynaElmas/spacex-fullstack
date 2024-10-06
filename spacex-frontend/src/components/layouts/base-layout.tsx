@@ -33,10 +33,10 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
         alt="Logo"
         className={`absolute top-0 m-4 w-[214px] h-[26px] ${
           isMobile ? "left-0 mt-16" : "right-0 mt-5"
-        }`} // Mobilde logo solda, masaüstünde sağda olacak
+        }`}
       />
       <div  className={`absolute top-0  ${
-          isMobile ? "left-64 mt-16" : "right-64 mt-6"
+          isMobile ? "right-10 mt-16" : "right-64 mt-6"
         }`}>
         <LanguageSwitcher />
       </div>

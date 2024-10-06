@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { formatDateToDefault } from "@/lib/utils";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
+import UpdateEventModal from "./update-event-modal";
+import { EditIcon } from "lucide-react";
 
 interface UpcomingEventCardProps {
   id: number;
@@ -30,11 +32,10 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({
   imageUrl,
 }) => {
   const { formattedDate, formattedTime } = formatDateToDefault(date);
+  const [openUpdateEventModal, setOpenUpdateEventModal] = useState(false);
 
-  // useDeleteEvent hook
   const deleteEvent = useDeleteEvent();
 
-  // Event silme fonksiyonu
   const handleDelete = async () => {
     console.log("Deleting event with id:", id);
     try {
@@ -64,11 +65,8 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({
       {/* Trash Icon for deletion with confirmation */}
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <button
-            className="absolute top-2 right-2"
-            aria-label="Delete Event"
-          >
-          <TrashIcon color="#f0f0f0" />
+          <button className="absolute top-2 right-2" aria-label="Delete Event">
+            <TrashIcon color="#f0f0f0" />
           </button>
         </AlertDialogTrigger>
 
@@ -88,6 +86,19 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <button
+          className="absolute top-2 right-12 text-red-600 hover:text-red-800"
+          aria-label="Edit Event"
+        >
+          <EditIcon className="w-7 h-7" color="#f0f0f0" onClick={() => {setOpenUpdateEventModal(true)}} />
+        </button>
+      {openUpdateEventModal && (
+        <UpdateEventModal
+          open={openUpdateEventModal}
+          eventData={{ id, title, date, imageUrl }}
+          onClose={() => setOpenUpdateEventModal(false)}
+        />
+      )}
     </div>
   );
 };

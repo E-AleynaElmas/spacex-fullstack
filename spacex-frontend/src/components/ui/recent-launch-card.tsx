@@ -95,7 +95,7 @@ const RecentLaunchCard: React.FC<RecentLaunchCardProps> = ({
         </AlertDialog>
         <button
           className="absolute top-2 right-12 text-red-600 hover:text-red-800"
-          aria-label="Delete Event"
+          aria-label="Edit Event"
         >
           <EditIcon className="w-7 h-7" color="#f0f0f0" onClick={() => {setOpenUpdateFeedModal(true)}} />
         </button>

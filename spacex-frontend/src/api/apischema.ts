@@ -163,6 +163,22 @@ export interface components {
             /** @description User Password */
             password: string;
         };
+        CreateFeedDto: {
+            /** @description Title */
+            title: string;
+            /** @description Description */
+            description: string;
+            /**
+             * @description Date
+             * @example 2024-07-05T10:00:00
+             */
+            date: string;
+            /**
+             * @description Image URL
+             * @example https://example.com/image.jpg
+             */
+            imageUrl: string;
+        };
         UpdateFeedDto: {
             /** @description Title */
             title?: string;
@@ -178,6 +194,20 @@ export interface components {
              * @example https://example.com/image.jpg
              */
             imageUrl?: string;
+        };
+        CreateEventDto: {
+            /** @description Title */
+            title: string;
+            /**
+             * @description Date
+             * @example 2024-06-12T21:10:00
+             */
+            date: string;
+            /**
+             * @description Image URL
+             * @example https://example.com/image.jpg
+             */
+            imageUrl: string;
         };
         UpdateEventDto: {
             /** @description Title */
@@ -312,7 +342,7 @@ export interface operations {
         /** @description Creating feeds */
         requestBody: {
             content: {
-                "multipart/form-data": string;
+                "multipart/form-data": components["schemas"]["CreateFeedDto"];
             };
         };
         responses: {
@@ -329,7 +359,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -348,7 +378,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -371,7 +401,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -412,7 +442,7 @@ export interface operations {
         /** @description Creating event. */
         requestBody: {
             content: {
-                "multipart/form-data": string;
+                "multipart/form-data": components["schemas"]["CreateEventDto"];
             };
         };
         responses: {

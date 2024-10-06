@@ -1,20 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { POST } from "../client";
+import { APISchemas, POST } from "../client";
 
-interface CreateFeedData {
-  title: string;
-  description: string;
-  date: string;
-  imageUrl: string;
-}
 
 const useCreateFeed = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: CreateFeedData) => {
+    mutationFn: async (data: APISchemas["CreateFeedDto"]) => {
       const response = await POST("/feed", {
         body: {
           description: data.description,
