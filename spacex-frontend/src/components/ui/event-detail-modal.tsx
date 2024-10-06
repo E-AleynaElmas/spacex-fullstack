@@ -49,7 +49,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({
   }, [event.date]);
 
   const handleBackClick = () => {
-    console.log("Back button clicked");
+    onClose();
   };
 
   const handleTrashClick = () => {

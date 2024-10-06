@@ -73,7 +73,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
           />
           <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
             <button
-              className="bg-black p-2 rounded-full"
+              className="bg-[#264061] p-2 rounded-full"
               onClick={handleRemoveImage}
             >
               <TrashIcon className="w-6 h-6 " color="white"  />
