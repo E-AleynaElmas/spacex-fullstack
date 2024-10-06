@@ -1,5 +1,5 @@
 import useDeleteFeed from "@/api/mutations/useDeleteFeed";
-import { TrashIcon } from "@/assets/icons/trash-icon"; // Assuming you have a trash icon component
+import { TrashIcon } from "@/assets/icons/trash-icon";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,9 +12,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { formatDateToDefault } from "@/lib/utils";
+import { EditIcon } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
+import UpdateFeedModal from "./update-feed-modal";
 
 interface RecentLaunchCardProps {
   id: number;
@@ -32,6 +34,7 @@ const RecentLaunchCard: React.FC<RecentLaunchCardProps> = ({
   imageUrl,
 }) => {
   const { formattedDate, formattedTime } = formatDateToDefault(date);
+  const [openUpdateFeedModal, setOpenUpdateFeedModal] = useState(false);
 
   const deleteEvent = useDeleteFeed();
 
@@ -90,11 +93,24 @@ const RecentLaunchCard: React.FC<RecentLaunchCardProps> = ({
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+        <button
+          className="absolute top-2 right-12 text-red-600 hover:text-red-800"
+          aria-label="Delete Event"
+        >
+          <EditIcon className="w-7 h-7" color="#f0f0f0" onClick={() => {setOpenUpdateFeedModal(true)}} />
+        </button>
       </div>
       <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg flex-col flex md:w-1/6 w-full justify-center items-center">
         <p className="text-gray-400">{formattedDate}</p>
         <p className="text-gray-400">{formattedTime}</p>
       </div>
+      {openUpdateFeedModal && (
+        <UpdateFeedModal
+          open={openUpdateFeedModal}
+          onClose={() => setOpenUpdateFeedModal(false)}
+          feedData={{ id, title, description, date, imageUrl }}
+        />
+      )}
     </div>
   );
 };
