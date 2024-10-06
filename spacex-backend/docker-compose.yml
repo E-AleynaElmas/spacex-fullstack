@@ -8,7 +8,7 @@ services:
     container_name: nestjs_app
     restart: unless-stopped
     env_file:
-      - .env.production
+      - .env
     ports:
       - "3000:3000"
     depends_on:
@@ -16,7 +16,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-      - ./firebase-service-account.json:/app/firebase-service-account.json
+      - ./firebase-service-account.json:/app/firebase-service-account.json 
     networks:
       - app-network
 
@@ -25,14 +25,15 @@ services:
     container_name: postgres_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: produser
-      POSTGRES_PASSWORD: produser123
-      POSTGRES_DB: prod_database
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./postgres-init:/docker-entrypoint-initdb.d  # init.sql dosyasını burada mount ediyoruz
+      - ./postgres-init:/docker-entrypoint-initdb.d  
     networks:
       - app-network
 
