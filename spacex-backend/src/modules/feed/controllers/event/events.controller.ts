@@ -6,8 +6,6 @@ import {
   Param,
   Delete,
   Put,
-  UseInterceptors,
-  UploadedFile,
   ParseIntPipe,
 } from '@nestjs/common';
 
@@ -17,53 +15,16 @@ import { UpdateEventDto } from '../../dto/update-event.dto';
 
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
-import { Inject } from '@nestjs/common';
-
-import * as admin from 'firebase-admin';
-
-import { CreateEventWithImageDto } from '../../dto/create-event-with-image.dto';
-
 @ApiTags('feed/events')
 @Controller('feed/events')
 export class EventsController {
-  constructor(
-    private readonly eventsService: EventsService,
-    @Inject('FIREBASE_ADMIN') private readonly firebaseAdmin: admin.app.App,
-  ) {}
+  constructor(private readonly eventsService: EventsService) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new event.' })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('image'))
-  @ApiBody({
-    description: 'Creating event.',
-    type: CreateEventWithImageDto,
-  })
-  async create(
-    @Body() createEventDto: CreateEventDto,
-    @UploadedFile() image: Express.Multer.File,
-  ) {
-    if (image) {
-      const bucket = this.firebaseAdmin.storage().bucket();
-      const fileName = `${Date.now()}_${image.originalname}`;
-      const file = bucket.file(fileName);
-
-      await file.save(image.buffer, {
-        metadata: {
-          contentType: image.mimetype,
-        },
-      });
-
-      const [url] = await file.getSignedUrl({
-        action: 'read',
-        expires: '03-09-2491',
-      });
-
-      createEventDto['imageUrl'] = url;
-    }
-
+  @ApiBody({ description: 'Creating event.', type: CreateEventDto })
+  async create(@Body() createEventDto: CreateEventDto) {
     return this.eventsService.create(createEventDto);
   }
 
@@ -85,12 +46,12 @@ export class EventsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateEventDto: UpdateEventDto,
   ) {
-    return this.eventsService.update(id, updateEventDto);
+    return this.eventsService.update(+id, updateEventDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete event.' })
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.eventsService.remove(id);
+    return this.eventsService.remove(+id);
   }
 }

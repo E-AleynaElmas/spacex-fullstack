@@ -9,6 +9,7 @@ import { User } from './modules/users/entities/user.entity';
 import { Feed } from './modules/feed/entities/feed.entity';
 import { Event } from './modules/feed/entities/event.entity';
 import { DatabaseConfig } from './config/database.config';
+import { FileModule } from './modules/file/file.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { DatabaseConfig } from './config/database.config';
     AuthModule,
     FeedModule,
     FirebaseModule,
+    FileModule,
   ],
 })
 export class AppModule {}

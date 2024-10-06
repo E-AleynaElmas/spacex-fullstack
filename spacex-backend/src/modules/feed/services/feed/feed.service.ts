@@ -34,10 +34,14 @@ export class FeedService {
     return this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<Feed> {
+    const feed = await this.findOne(id);
+
     const result = await this.feedRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Feed with ID ${id} not found`);
     }
+
+    return feed;
   }
 }

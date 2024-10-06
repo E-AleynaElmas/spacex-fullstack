@@ -22,6 +22,10 @@ export class CreateFeedDto {
   @IsDateString()
   date: string;
 
+  @ApiProperty({
+    description: 'Image URL',
+    example: 'https://example.com/image.jpg',
+  })
   @IsOptional()
   @IsString()
   imageUrl?: string;

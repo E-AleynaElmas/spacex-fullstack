@@ -11,4 +11,12 @@ export class CreateEventDto {
   @IsNotEmpty()
   @IsDateString()
   date: string;
+
+  @ApiProperty({
+    description: 'Image URL',
+    example: 'https://example.com/image.jpg',
+  })
+  @IsNotEmpty()
+  @IsString()
+  imageUrl: string;
 }

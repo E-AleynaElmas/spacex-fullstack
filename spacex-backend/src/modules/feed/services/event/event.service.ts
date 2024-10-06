@@ -41,10 +41,14 @@ export class EventsService {
     return this.eventsRepository.save(event);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<Event> {
+    const event = await this.findOne(id);
+
     const result = await this.eventsRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Event with ID ${id} not found`);
     }
+
+    return event;
   }
 }
