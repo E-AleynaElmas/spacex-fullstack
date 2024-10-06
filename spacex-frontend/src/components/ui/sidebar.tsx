@@ -1,13 +1,15 @@
 "use client";
 
+import { useAuthStore } from "@/store/auth-store";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import { CalendarIcon } from "../../assets/icons/calendar-icon";
 import { HomeIcon } from "../../assets/icons/home-icon";
 import { LiveIcon } from "../../assets/icons/live-icon";
 import { SettingsIcon } from "../../assets/icons/settings-icon";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 
 const sidebarItems = [
   { icon: HomeIcon, text: "Home", href: "/" },
@@ -19,6 +21,11 @@ const sidebarItems = [
 export default function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout); // Logout fonksiyonu
+
+  console.log(user);
 
   return (
     <motion.div
@@ -30,6 +37,13 @@ export default function Sidebar() {
       onMouseLeave={() => setIsExpanded(false)}
       style={{ overflow: "hidden" }}
     >
+      <div className="flex justify-center flex-col space-y-4 items-center mt-20">
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <p className="text-white font-medium">{user?.firstName}</p>
+      </div>
       <nav
         className={`flex flex-col justify-center ${
           isExpanded ? "items-start" : "items-center"
@@ -74,6 +88,19 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Logout Button */}
+      <div className="absolute bottom-8 w-full flex justify-center">
+        <button
+          className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-500 transition-all"
+          onClick={async () => {
+            await logout();
+            router.push("/auth/login");
+          }}
+        >
+          Logout
+        </button>
+      </div>
     </motion.div>
   );
 }

@@ -12,17 +12,26 @@ export type APISchemas = components["schemas"];
 
 export { DELETE, GET, PATCH, POST, PUT };
 
-const authMiddleware:Middleware = {
+const authMiddleware: Middleware = {
   async onRequest({ request }) {
     const token = useAuthStore.getState().token;
-    request.headers.set("Authorization", `Bearer ${token}`);
+
+    if (token) {
+      request.headers.set("Authorization", `Bearer ${token}`);
+    }
+    
     return request;
   },
-  async onResponse({  response }) {
-    const { body, ...resOptions } = response;
-    // change status of response
-    return new Response(body, { ...resOptions, status: 200 });
+  async onResponse({ response }) {
+    if (!response.ok) {
+      // Hata durumunda hatayı fırlat
+      const errorBody = await response.json();
+      throw new Error(errorBody.message || "An error occurred");
+    }
+    
+    return response; // Hatalı değilse normal response döndür
   },
 };
 
+// Middleware kullanımı
 use(authMiddleware);

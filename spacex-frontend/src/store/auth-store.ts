@@ -1,10 +1,17 @@
-import { APISchemas, GET } from "@/api/client";
+import { GET } from "@/api/client";
 import { create, createStore } from "zustand";
 import { persist } from "zustand/middleware";
 
 export type AuthState = {
   token: string | undefined;
-  user: APISchemas | undefined;
+  user:
+    | {
+        userId: string;
+        email: string;
+        firstName: string;
+        lastName: string;
+      }
+    | undefined;
 };
 
 export type AuthActions = {
@@ -43,16 +50,32 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       logout: () => {
-        set({ token: "" });
+        set({ token: "", user: undefined });
         localStorage.removeItem("token");
+
+        // Remove the token from cookies
+        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       },
+
       setUser: async () => {
-        const {} = await GET("/auth/me", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${get().token}`,
-          },
-        });
+        try {
+          const response = await GET("/auth/me", {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${get().token}`,
+            },
+          });
+
+          // Gelen kullanıcı bilgilerini state'e set et
+          if (response && response.data) {
+            set({ user: response.data });
+          } else {
+            console.error("User data is undefined from /auth/me");
+          }
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+          set({ user: undefined }); // Hata durumunda kullanıcıyı undefined yapabiliriz.
+        }
       },
     }),
     { name: "auth-store" }
