@@ -12,7 +12,7 @@ const CalendarPage: React.FC = () => {
     <BaseLayout>
       <div className="space-y-8">
         <h2 className="text-white text-2xl font-semibold mb-4">{t("calendar.title")}</h2>
-        <Calendar eventsLoading={feedIsLoading} events={feedData} />
+        <Calendar eventsLoading={feedIsLoading} events={feedData || []} />
       </div>
     </BaseLayout>
   );
