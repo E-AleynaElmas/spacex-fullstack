@@ -47,8 +47,8 @@ const RecentLaunchCard: React.FC<RecentLaunchCardProps> = ({
   };
 
   return (
-    <div className="flex flex-row space-x-4 relative">
-      <div className="bg-gray-800 p-4 rounded-lg justify-start items-start overflow-hidden shadow-lg h-40 flex w-5/6 relative">
+    <div className="flex md:flex-row flex-col space-y-4 md:space-y-0 md:space-x-4 relative">
+      <div className="bg-gray-800 pt-10 p-4 rounded-lg justify-start items-start overflow-hidden shadow-lg h-52 flex md:w-5/6 w-full relative">
         <Image
           src={imageUrl}
           alt={title}
@@ -91,7 +91,7 @@ const RecentLaunchCard: React.FC<RecentLaunchCardProps> = ({
           </AlertDialogContent>
         </AlertDialog>
       </div>
-      <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg flex-col flex w-1/6 justify-center items-center">
+      <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg flex-col flex md:w-1/6 w-full justify-center items-center">
         <p className="text-gray-400">{formattedDate}</p>
         <p className="text-gray-400">{formattedTime}</p>
       </div>
