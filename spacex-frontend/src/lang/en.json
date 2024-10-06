@@ -1,7 +1,9 @@
 {
     "home": {
       "upcoming_events": "Upcoming Events",
-      "recent_launches": "Recent Launches"
+      "recent_launches": "Recent Launches",
+      "no_events": "No events created yet. Please click the plus button on the right to create one.",
+      "no_feed": "No feed created yet. Please click the plus button on the right to create one."
     },
     "settings": {
       "title": "Settings"

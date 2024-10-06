@@ -23,7 +23,9 @@ const UpcomingEvents: React.FC = () => {
   return (
     <section>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-white text-2xl font-semibold">{t("home.upcoming_events")}</h2>
+        <h2 className="text-white text-2xl font-semibold">
+          {t("home.upcoming_events")}
+        </h2>
         <PlusIcon
           className="h-6 w-6 text-white"
           onClick={() => {
@@ -33,19 +35,23 @@ const UpcomingEvents: React.FC = () => {
       </div>
       <div className="flex space-x-4 overflow-x-auto">
         {feedEventsIsLoading ? (
-          <div className="flex justify-center w-full  items-center">
+          <div className="flex justify-center w-full items-center">
             <CircleSpinner className="w-10 h-10" />
           </div>
-        ) : (
+        ) : feedEventsData && feedEventsData.length > 0 ? (
           feedEventsData.map((event: UpcomingEventsProps) => (
             <UpcomingEventCard
-            id={event.id}
+              id={event.id}
               key={event.id}
               title={event.title}
               date={event.date}
               imageUrl={event.imageUrl}
             />
           ))
+        ) : (
+          <div className="flex justify-center items-center w-full text-center">
+            <p className="text-white">{t("home.no_events")}</p>
+          </div>
         )}
       </div>
       {openModal && (

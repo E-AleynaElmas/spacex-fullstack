@@ -1,7 +1,9 @@
 {
     "home": {
       "upcoming_events": "Yaklaşan Etkinlikler",
-      "recent_launches": "Son Fırlatmalar"
+      "recent_launches": "Son Fırlatmalar",
+      "no_events": "Henüz etkinlik oluşturulmadı. Lütfen bir tane oluşturmak için sağdaki artı butonuna tıklayın.",
+      "no_feed": "Henüz akış oluşturulmadı. Lütfen bir tane oluşturmak için sağdaki artı butonuna tıklayın."
     },
     "settings": {
       "title": "Ayarlar"

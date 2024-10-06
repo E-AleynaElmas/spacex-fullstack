@@ -23,7 +23,9 @@ const RecentLaunches: React.FC = () => {
   return (
     <section>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-white text-2xl font-semibold">{t("home.recent_launches")}</h2>
+        <h2 className="text-white text-2xl font-semibold">
+          {t("home.recent_launches")}
+        </h2>
         <PlusIcon
           className="h-6 w-6 text-white"
           onClick={() => {
@@ -36,7 +38,7 @@ const RecentLaunches: React.FC = () => {
           <div className="flex justify-center items-center">
             <CircleSpinner className="w-10 h-10" />
           </div>
-        ) : (
+        ) : feedData && feedData.length > 0 ? (
           feedData.map((launch: RecentLaunchesProps) => (
             <RecentLaunchCard
               id={launch.id}
@@ -47,6 +49,10 @@ const RecentLaunches: React.FC = () => {
               imageUrl={launch.imageUrl}
             />
           ))
+        ) : (
+          <div className="flex justify-center items-center w-full text-center">
+            <p className="text-white">{t("home.no_feed")}</p>
+          </div>
         )}
       </div>
       {openModal && (
