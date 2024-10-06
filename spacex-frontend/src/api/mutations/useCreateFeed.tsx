@@ -32,7 +32,6 @@ const useCreateFeed = () => {
     onSuccess: () => {
       toast.success("Feed created successfully");
       queryClient.invalidateQueries({ queryKey: ["feed"] });
-      router.push("/");
     },
   });
 };

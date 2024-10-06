@@ -2,7 +2,7 @@ import useCreateFeed from "@/api/mutations/useCreateFeed";
 import useUploadFile from "@/api/mutations/useUploadFile";
 import { ArrowBackCircleIcon } from "@/assets/icons/arrow-back-circle-icon";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import Dropzone from "./Dropzone";
@@ -18,16 +18,23 @@ interface FeedFormValues {
 const schema = yup.object({
   title: yup.string().required("Title is required"),
   date: yup
-    .date()
+    .string()
     .required("Date is required")
-    .typeError("Invalid date format"),
+    .typeError("Invalid date format"), // Tarih string olarak alınacak
   description: yup.string().required("Description is required"),
   imageUrl: yup.mixed().nullable().required("Image is required"),
 });
 
-const AddFeedModal: React.FC<{ open: boolean; onClose: () => void }> = ({
+interface AddFeedModalProps {
+  open: boolean;
+  onClose: () => void;
+  initialDate?: string; // Optional initial date prop
+}
+
+const AddFeedModal: React.FC<AddFeedModalProps> = ({
   open,
   onClose,
+  initialDate,
 }) => {
   const {
     control,
@@ -39,53 +46,52 @@ const AddFeedModal: React.FC<{ open: boolean; onClose: () => void }> = ({
     resolver: yupResolver(schema),
   });
 
-  // useUploadFile ve useCreateFeed hooklarını çağırıyoruz
   const firebaseImage = useUploadFile();
   const createFeed = useCreateFeed();
 
-  // Form gönderildiğinde çalışacak fonksiyon
-  const onSubmit = async (data: FeedFormValues) => {
-    console.log("Form verileri:", data);
+  useEffect(() => {
+    if (initialDate) {
+      setValue("date", ""); // initialDate varsa sadece saat seçimi yapılacak
+    }
+  }, [initialDate, setValue]);
 
-    const date = new Date(data.date);
-    const offset = date.getTimezoneOffset() * 60000;
-    const localDate = new Date(date.getTime() - offset)
-      .toISOString()
-      .slice(0, 19);
+  const onSubmit = async (data: FeedFormValues) => {
+    let finalDate = data.date;
+
+    if (initialDate) {
+      // initialDate (tarih) ile seçilen saat birleştiriliyor
+      const [hour, minute] = data.date.split(":");
+      const combinedDate = new Date(initialDate);
+      combinedDate.setHours(parseInt(hour));
+      combinedDate.setMinutes(parseInt(minute));
+      finalDate = combinedDate.toISOString(); // ISO string formatına çevriliyor
+    }
 
     if (data.imageUrl) {
       try {
-        // Image upload işlemi
         const uploadResponse = await firebaseImage.mutateAsync({
           image: data.imageUrl,
         });
 
-        console.log("Dosya yükleme başarılı:", uploadResponse);
-
         const formData = {
           title: data.title,
-          date: localDate,
+          date: finalDate,
           description: data.description,
-          imageUrl: uploadResponse.imageUrl || "", 
+          imageUrl: uploadResponse.imageUrl || "",
         };
-
-        console.log("Oluşturulacak Feed:", formData);
+        console.log("Form data:", formData);
 
         await createFeed.mutateAsync(formData);
-
         onClose();
       } catch (error) {
         console.error("Dosya yükleme hatası:", error);
       }
-    } else {
-      console.error("Resim yüklenemedi. imageUrl mevcut değil.");
     }
   };
 
-  // Formdaki image güncellenince formun tekrar valide olup olmadığını kontrol edelim
   const handleImageChange = (file: File | null) => {
     setValue("imageUrl", file);
-    trigger("imageUrl"); // Bu form validation'ını yeniden tetikleyecek
+    trigger("imageUrl");
   };
 
   return (
@@ -120,7 +126,7 @@ const AddFeedModal: React.FC<{ open: boolean; onClose: () => void }> = ({
               render={({ field }) => (
                 <input
                   {...field}
-                  type="datetime-local"
+                  type={initialDate ? "time" : "datetime-local"} // initialDate varsa sadece saat seçimi yapılacak
                   className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
                 />
               )}

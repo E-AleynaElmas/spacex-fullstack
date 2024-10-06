@@ -1,6 +1,6 @@
 "use client";
+import { CalendarAddIcon } from "@/assets/icons/calendar-add-icon";
 import BgBase from "@/assets/images/bg-base.png";
-import { formatDateToDefault } from "@/lib/utils";
 import {
   addDays,
   addMonths,
@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { ChevronLeftIcon } from "../../assets/icons/chevron-left-icon";
 import { FilterIcon } from "../../assets/icons/filter-icon";
 import { MenuIcon } from "../../assets/icons/menu-icon";
+import AddFeedModal from "./add-feed-modal";
 import EventDetailModal from "./event-detail-modal";
 
 interface Event {
@@ -30,14 +31,23 @@ interface CalendarProps {
   eventsLoading?: boolean;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ events,eventsLoading }) => {
+const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [openAddFeedModal, setOpenAddFeedModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null); // Seçilen tarih
+
   const [view, setView] = useState<"monthly" | "weekly">("monthly");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
-  if(eventsLoading){
-    return <div>Loading...</div>
+  if (eventsLoading) {
+    return <div>Loading...</div>;
   }
+
+  const handleAddEventClick = (day: Date) => {
+    const formattedDate = format(day, "yyyy-MM-dd");
+    setSelectedDate(formattedDate); // Seçilen tarihi ayarla
+    setOpenAddFeedModal(true);
+  };
 
   const renderHeader = () => {
     return (
@@ -97,24 +107,33 @@ const Calendar: React.FC<CalendarProps> = ({ events,eventsLoading }) => {
 
     let day = startDate;
     while (day <= endDate) {
-      const isCurrentMonth = format(day, "MM") === format(currentMonth, "MM");
+      const currentDay = day;
+      const isCurrentMonth =
+        format(currentDay, "MM") === format(currentMonth, "MM");
+
       days.push(
         <div
           style={
             isCurrentMonth ? { backgroundImage: `url(${BgBase.src})` } : {}
           }
-          key={day.toString()}
+          key={currentDay.toString()}
           className={`min-h-32  border border-gray-700 relative ${
             isCurrentMonth ? "" : "bg-[#212F42]"
           }`}
         >
-          <div className="text-white text-sm">{format(day, "d")}</div>
+          <div>
+            <div className="text-white text-sm">{format(currentDay, "d")}</div>
+            <CalendarAddIcon
+              className="absolute top-1 right-1 cursor-pointer"
+              onClick={() => handleAddEventClick(currentDay)}
+            />
+          </div>
           <div className="text-white text-xs absolute bottom-1 left-1 right-1 overflow-y-auto pt-4 max-h-[calc(100%-1rem)] ">
             {events
               .filter(
                 (event) =>
                   format(new Date(event.date), "yyyy-MM-dd") ===
-                  format(day, "yyyy-MM-dd")
+                  format(currentDay, "yyyy-MM-dd")
               )
               .map((event, index) => (
                 <div
@@ -122,7 +141,7 @@ const Calendar: React.FC<CalendarProps> = ({ events,eventsLoading }) => {
                   className="bg-[#212F42] rounded p-1 mt-1 cursor-pointer"
                   onClick={() => setSelectedEvent(event)}
                 >
-                  {formatDateToDefault(event.date).formattedTime}
+                  {event.title}
                 </div>
               ))}
           </div>
@@ -147,6 +166,13 @@ const Calendar: React.FC<CalendarProps> = ({ events,eventsLoading }) => {
           event={selectedEvent}
           open={!!selectedEvent}
           onClose={() => setSelectedEvent(null)}
+        />
+      )}
+      {openAddFeedModal && (
+        <AddFeedModal
+          open={openAddFeedModal}
+          onClose={() => setOpenAddFeedModal(false)}
+          initialDate={selectedDate} // initialDate olarak seçilen tarihi gönder
         />
       )}
     </div>

@@ -30,7 +30,6 @@ const useCreateEvent = () => {
     onSuccess: () => {
       toast.success("Event created successfully");
       queryClient.invalidateQueries({ queryKey: ["feedEvents"] });
-      router.push("/");
     },
   });
 };
