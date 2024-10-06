@@ -1,3 +1,4 @@
+// Calendar.tsx
 "use client";
 import { CalendarAddIcon } from "@/assets/icons/calendar-add-icon";
 import BgBase from "@/assets/images/bg-base.png";
@@ -12,6 +13,8 @@ import {
   subMonths,
 } from "date-fns";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { enUS, tr } from "date-fns/locale"; // Import date-fns locales
 import { ChevronLeftIcon } from "../../assets/icons/chevron-left-icon";
 import { FilterIcon } from "../../assets/icons/filter-icon";
 import { MenuIcon } from "../../assets/icons/menu-icon";
@@ -32,20 +35,22 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
+  const { t, i18n } = useTranslation(); // Initialize translation hook
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [openAddFeedModal, setOpenAddFeedModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null); // Seçilen tarih
-
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [view, setView] = useState<"monthly" | "weekly">("monthly");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
+  const locale = i18n.language === "tr" ? tr : enUS; // Define locale based on the selected language
+
   if (eventsLoading) {
-    return <div>Loading...</div>;
+    return <div>{t("calendar.loading")}</div>;
   }
 
   const handleAddEventClick = (day: Date) => {
-    const formattedDate = format(day, "yyyy-MM-dd");
-    setSelectedDate(formattedDate); // Seçilen tarihi ayarla
+    const formattedDate = format(day, "yyyy-MM-dd", { locale });
+    setSelectedDate(formattedDate);
     setOpenAddFeedModal(true);
   };
 
@@ -60,7 +65,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
             <ChevronLeftIcon className="text-gray-700" color="#4A5568" />
           </button>
           <h2 className="text-gray-700 text-lg font-semibold mx-2">
-            {format(currentMonth, "MMMM yyyy")}
+            {format(currentMonth, "MMMM yyyy", { locale })}
           </h2>
           <button
             onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
@@ -79,7 +84,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
             }`}
             onClick={() => setView("weekly")}
           >
-            Weekly
+            {t("calendar.weekly")}
           </button>
           <button
             className={` ${
@@ -87,7 +92,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
             }`}
             onClick={() => setView("monthly")}
           >
-            Monthly
+            {t("calendar.monthly")}
           </button>
           <button>
             <MenuIcon color="#212F42" />
@@ -102,14 +107,15 @@ const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
 
   const renderDays = () => {
     const days = [];
-    const startDate = startOfWeek(startOfMonth(currentMonth));
-    const endDate = endOfWeek(endOfMonth(currentMonth));
+    const startDate = startOfWeek(startOfMonth(currentMonth), { locale });
+    const endDate = endOfWeek(endOfMonth(currentMonth), { locale });
 
     let day = startDate;
     while (day <= endDate) {
       const currentDay = day;
       const isCurrentMonth =
-        format(currentDay, "MM") === format(currentMonth, "MM");
+        format(currentDay, "MM", { locale }) ===
+        format(currentMonth, "MM", { locale });
 
       days.push(
         <div
@@ -122,7 +128,9 @@ const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
           }`}
         >
           <div>
-            <div className="text-white text-sm">{format(currentDay, "d")}</div>
+            <div className="text-white text-sm">
+              {format(currentDay, "d", { locale })}
+            </div>
             <CalendarAddIcon
               className="absolute top-1 right-1 cursor-pointer"
               onClick={() => handleAddEventClick(currentDay)}
@@ -132,8 +140,8 @@ const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
             {events
               .filter(
                 (event) =>
-                  format(new Date(event.date), "yyyy-MM-dd") ===
-                  format(currentDay, "yyyy-MM-dd")
+                  format(new Date(event.date), "yyyy-MM-dd", { locale }) ===
+                  format(currentDay, "yyyy-MM-dd", { locale })
               )
               .map((event, index) => (
                 <div
@@ -172,7 +180,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, eventsLoading }) => {
         <AddFeedModal
           open={openAddFeedModal}
           onClose={() => setOpenAddFeedModal(false)}
-          initialDate={selectedDate} // initialDate olarak seçilen tarihi gönder
+          initialDate={selectedDate} 
         />
       )}
     </div>

@@ -1,0 +1,30 @@
+{
+    "home": {
+      "upcoming_events": "Upcoming Events",
+      "recent_launches": "Recent Launches"
+    },
+    "settings": {
+      "title": "Settings"
+    },
+    "calendar": {
+      "title": "Schedule",
+      "monthly": "Monthly",
+      "weekly": "Weekly",
+      "loading": "Loading...",
+      "december": "December",
+      "menu": "Menu",
+      "filter": "Filter"
+    },
+    "live": {
+      "title": "Live"
+    },
+    "modal": {
+      "add_feed_title": "Add Feed",
+      "add_event_title": "Add Event",
+      "submit": "Submit",
+      "title": "Title",
+      "date": "Date",
+      "description": "Description",
+      "image": "Image"
+    }
+  }

@@ -1,0 +1,30 @@
+{
+    "home": {
+      "upcoming_events": "Yaklaşan Etkinlikler",
+      "recent_launches": "Son Fırlatmalar"
+    },
+    "settings": {
+      "title": "Ayarlar"
+    },
+    "calendar": {
+      "title": "Takvim",
+      "monthly": "Aylık",
+      "weekly": "Haftalık",
+      "loading": "Yükleniyor...",
+      "december": "Aralık",
+      "menu": "Menü",
+      "filter": "Filtre"
+    },
+    "live": {
+      "title": "Canlı"
+    },
+    "modal": {
+      "add_feed_title": "Gönderi Ekle",
+      "add_event_title": "Etkinlik Ekle",
+      "submit": "Gönder",
+      "title": "Başlık",
+      "date": "Tarih",
+      "description": "Açıklama",
+      "image": "Görsel"
+    }
+  }

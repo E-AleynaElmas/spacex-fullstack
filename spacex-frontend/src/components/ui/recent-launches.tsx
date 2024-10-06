@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import AddFeedModal from "./add-feed-modal";
 import CircleSpinner from "./circle-spinner";
 import RecentLaunchCard from "./recent-launch-card";
+import { useTranslation } from "react-i18next";
 
 interface RecentLaunchesProps {
   id: number;
@@ -17,11 +18,12 @@ interface RecentLaunchesProps {
 const RecentLaunches: React.FC = () => {
   const { data: feedData, isLoading: feedIsLoading } = useGetFeed();
   const [openModal, setOpenModal] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <section>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-white text-2xl font-semibold">Recent Launch</h2>
+        <h2 className="text-white text-2xl font-semibold">{t("home.recent_launches")}</h2>
         <PlusIcon
           className="h-6 w-6 text-white"
           onClick={() => {

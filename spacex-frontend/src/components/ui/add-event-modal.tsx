@@ -4,6 +4,7 @@ import { ArrowBackCircleIcon } from "@/assets/icons/arrow-back-circle-icon";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import Dropzone from "./Dropzone";
 import Modal from "./Modal/Modal";
@@ -39,6 +40,7 @@ const AddEventModal: React.FC<{ open: boolean; onClose: () => void }> = ({
   // useUploadFile ve useCreateEvent hooklarını çağırıyoruz
   const firebaseImage = useUploadFile();
   const createEvent = useCreateEvent();
+  const { t } = useTranslation();
 
   // Form gönderildiğinde çalışacak fonksiyon
   const onSubmit = async (data: EventFormValues) => {
@@ -91,7 +93,9 @@ const AddEventModal: React.FC<{ open: boolean; onClose: () => void }> = ({
       <div className="p-6 space-y-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Title</label>
+            <label className="block text-sm font-medium">
+              {t("modal.title")}
+            </label>
             <Controller
               name="title"
               control={control}
@@ -111,7 +115,9 @@ const AddEventModal: React.FC<{ open: boolean; onClose: () => void }> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Date</label>
+            <label className="block text-sm font-medium">
+              {t("modal.date")}
+            </label>
             <Controller
               name="date"
               control={control}
@@ -131,7 +137,9 @@ const AddEventModal: React.FC<{ open: boolean; onClose: () => void }> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Image</label>
+            <label className="block text-sm font-medium">
+              {t("modal.image")}
+            </label>
             <Dropzone onImageChange={handleImageChange} />
             {errors.imageUrl && (
               <span className="text-red-500 text-sm">
@@ -144,17 +152,12 @@ const AddEventModal: React.FC<{ open: boolean; onClose: () => void }> = ({
             type="submit"
             className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg"
           >
-            Submit
+            {t("modal.submit")}
           </button>
         </form>
       </div>
 
-      <button
-        className="absolute right-5 top-5 z-50"
-        onClick={() => {
-          onClose();
-        }}
-      >
+      <button className="absolute right-5 top-5 z-50" onClick={onClose}>
         <ArrowBackCircleIcon color="#f0f0f0" />
       </button>
     </Modal>
